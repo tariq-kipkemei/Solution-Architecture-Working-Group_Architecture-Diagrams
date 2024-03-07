@@ -8,7 +8,7 @@ https://www.google.com/url?q=https://www.planttext.com/&source=gmail-imap&ust=17
 USECASE: Transfer from wallet to linked Bank Account
 ====================================================
 
-@startuml
+@startuml Transfer from wallet to linked Bank Account
 actor User
 participant "Mobile APP" as app
 participant "Digiwave Wallet Module" as DW
