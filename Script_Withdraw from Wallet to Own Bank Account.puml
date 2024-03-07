@@ -1,0 +1,47 @@
+REF: Goals and Assumptions: 
+https://www.google.com/url?q=https://confluence.softwaregroup.com/pages/viewpage.action?spaceKey%3DMT%26title%3DWithdrawal%2Bof%2Bmoney%2Bto%2Ba%2Bbank%2Baccount&source=gmail-imap&ust=1710361143000000&usg=AOvVaw3ef5oPTGUs1facJ6p56mTZ
+
+Open with: Plant Text UML Editor
+https://www.google.com/url?q=https://www.planttext.com/&source=gmail-imap&ust=1710361143000000&usg=AOvVaw3eTXFyJ97xcBy2-qkPM27h
+
+
+USECASE: Transfer from wallet to linked Bank Account
+====================================================
+
+@startuml
+actor User
+participant "Mobile APP" as app
+participant "Digiwave Wallet Module" as DW
+participant Bank
+
+DW -> DW: Bank List Managment
+note right: List of banks updated\nin Digiwave
+User -> app: Selects "Withdraw to Bank option" \nfrom mobile APP menu
+app -> DW: Fetch Bank list
+DW --> app: response
+User -> app: Selects the Bank name from list of banks
+app -> DW: Fetch linked Accounts
+DW -> DW: Fecth National ID from customer account
+DW -> Bank: Sends request to bank to fetch linked accounts\n<contains National_ID>
+note right: request contains\ncustomer National ID 
+Bank -> Bank: Checks if linked account(s) exist for user
+Bank --> DW: Returns linked accounts to DW
+DW --> app: Return  linked accounts
+User -> app: Selects a linked account
+User -> app: Enters amount to transfer to linked account
+app -> DW: Validate Transfer
+DW -> DW: Check Balance\nRule Check <fees and Limits>
+DW --> app: response
+note left:App returns transaction\nsummary for\ncustomer to Confirm
+app <- User: Confirm transaction detials
+
+User -> app: Provides PIN to authorize transaction
+app -> DW: Validate PIN\n<tansfer_execute>
+DW -> DW: Debit Customer account\nand Credit GL Account
+note right: GL Account name:\nMoney in transit
+DW -> Bank: Sends a Transfer request
+note right: Source Account:Pool Account\nDestination Account:Customer linked Account
+Bank -> Bank: Performs the required transaction
+Bank --> DW: response
+DW -> app: Commits the payment and sends \nnotification for successful transaction
+@enduml
